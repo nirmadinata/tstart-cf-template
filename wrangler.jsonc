@@ -1,13 +1,38 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
+  "name": "template-app",
   "compatibility_date": "2025-11-17",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
 
   "env": {
     "local": {
-      "name": "template-local"
+      "name": "template-app-local",
+      "vars": {
+        "BUN_VERSION": "1.3.5"
+      },
+      "kv_namespaces": [
+        {
+          "binding": "INTERNAL_KV",
+          "id": "internal-kv",
+          "remote": false
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "INTERNAL_DB",
+          "database_id": "internal-db",
+          "database_name": "internal-db",
+          "migrations_dir": "./src/integrations/internal-db/migrations",
+          "remote": false
+        }
+      ]
+    },
+    "production": {
+      "name": "template-app-production",
+      "vars": {
+        "BUN_VERSION": "1.3.5"
+      }
     }
   }
 }

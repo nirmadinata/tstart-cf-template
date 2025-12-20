@@ -1,5 +1,5 @@
 {
-  "name": "tstart-cf-template",
+  "name": "template-app",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,13 +10,13 @@
     "format": "biome format --fix",
     "lint": "biome lint --fix",
     "check": "biome check",
-    "deploy": "npm run build && wrangler deploy",
-    "cf:typegen": "wrangler types -e development --env-interface CloudflareEnv ./cloudflare-env.d.ts",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:pull": "drizzle-kit pull",
-    "db:studio": "drizzle-kit studio"
+    "deploy": "bun run build && wrangler deploy",
+    "cf:typegen": "wrangler types -e local --env-interface CloudflareEnv ./cloudflare-env.d.ts",
+    "db:internal:generate": "drizzle-kit generate --config ./src/integrations/internal-db/drizzle.config.ts",
+    "db:internal:local:migrate": "wrangler -e local d1 migrations apply internal-db",
+    "db:internal:local:studio": "ENV=local drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.ts --port 8080",
+    "db:internal:production:migrate": "wrangler -e production d1 migrations apply internal-db",
+    "db:internal:production:studio": "ENV=production drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.ts --port 8080"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.13.8",
