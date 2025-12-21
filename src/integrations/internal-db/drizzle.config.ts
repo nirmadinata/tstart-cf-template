@@ -15,11 +15,9 @@ export default defineConfig({
 	schema: "./src/integrations/internal-db/schema.ts",
 	dialect: "sqlite",
 	driver: "d1-http",
-	dbCredentials: path
-		? {
-				accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
-				databaseId: process.env.CLOUDFLARE_DATABASE_ID,
-				token: process.env.CLOUDFLARE_API_TOKEN,
-			}
-		: undefined,
+	dbCredentials: {
+		accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
+		databaseId: process.env.CLOUDFLARE_DATABASE_ID,
+		token: process.env.CLOUDFLARE_API_TOKEN,
+	},
 });

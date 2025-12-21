@@ -14,9 +14,9 @@
     "cf:typegen": "wrangler types -e local --env-interface CloudflareEnv ./cloudflare-env.d.ts",
     "db:internal:generate": "drizzle-kit generate --config ./src/integrations/internal-db/drizzle.config.ts",
     "db:internal:local:migrate": "wrangler -e local d1 migrations apply internal-db",
-    "db:internal:local:studio": "ENV=local drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.ts --port 8080",
+    "db:internal:local:studio": "ENV=local drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.studio-local.ts",
     "db:internal:production:migrate": "wrangler -e production d1 migrations apply internal-db",
-    "db:internal:production:studio": "ENV=production drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.ts --port 8080"
+    "db:internal:production:studio": "ENV=production drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.13.8",
@@ -62,6 +62,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.10",
+    "@nerdfolio/drizzle-d1-helpers": "^0.1.4",
     "@tanstack/devtools-vite": "^0.3.11",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
