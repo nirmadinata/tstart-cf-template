@@ -1,18 +1,16 @@
 import type { TanStackDevtoolsReactPlugin } from "@tanstack/react-devtools";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import type { PropsWithChildren } from "react";
+import React from "react";
 
-type Props = PropsWithChildren<{
-	queryClient: QueryClient;
-}>;
-
-export function TanstackIntegrationProvider({ children, queryClient }: Props) {
-	return (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-	);
-}
+export const TSDevtools = import.meta.env.DEV
+	? React.lazy(() =>
+			import("@tanstack/react-devtools").then((mod) => ({
+				default: mod.TanStackDevtools,
+			}))
+		)
+	: () => null;
 
 export function getTanstackIntegrationContext() {
 	const queryClient = new QueryClient();

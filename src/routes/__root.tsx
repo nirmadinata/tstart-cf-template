@@ -1,12 +1,12 @@
-import { TanStackDevtools } from "@tanstack/react-devtools";
-import type { QueryClient } from "@tanstack/react-query";
+import { type QueryClient, useQuery } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
 	HeadContent,
 	Scripts,
 } from "@tanstack/react-router";
 import type { PropsWithChildren } from "react";
-import { plugins } from "@/integrations/tanstack";
+import { Suspense } from "react";
+import { plugins, TSDevtools } from "@/integrations/tanstack";
 import appCss from "@/styles.css?url";
 
 type RootContext = {
@@ -41,6 +41,15 @@ export const Route = createRootRouteWithContext<RootContext>()({
 type Props = PropsWithChildren;
 
 function RootDocument({ children }: Props) {
+	const { data } = useQuery({
+		queryKey: ["hello"],
+		queryFn: async () => {
+			await new Promise((r) => setTimeout(r, 1000));
+
+			return "hello";
+		},
+	});
+
 	return (
 		<html lang="en">
 			<head>
@@ -49,12 +58,15 @@ function RootDocument({ children }: Props) {
 			<body>
 				{/* TODO: add navbars here */}
 				{children}
-				<TanStackDevtools
-					config={{
-						position: "bottom-right",
-					}}
-					plugins={plugins}
-				/>
+				<div>Tadaaaa: {data}</div>
+				<Suspense>
+					<TSDevtools
+						config={{
+							position: "bottom-right",
+						}}
+						plugins={plugins}
+					/>
+				</Suspense>
 				<Scripts />
 			</body>
 		</html>

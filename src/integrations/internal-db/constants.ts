@@ -3,7 +3,7 @@
  */
 export const TABLE_ENUM = {
 	/**
-	 * better-auth specific tables
+	 * master tables
 	 */
 	USERS: "users",
 	SESSIONS: "sessions",
@@ -11,16 +11,32 @@ export const TABLE_ENUM = {
 	VERIFICATIONS: "verifications",
 
 	/**
-	 * page settings specific tables
+	 * page setting related
 	 */
 	LOCALES: "locales",
 	TAGS: "tags",
+	STATIC_PAGE_METADATAS: "static_page_metadatas",
 
 	/**
-	 * media specific tables
+	 * media related
 	 */
+	MIME_TYPES: "mime_types",
 	MEDIAS: "media",
-	MEDIA_MIME_TYPES: "media_mime_types",
+	MEDIA_TAGS: "media_tags",
+} as const;
+
+export const INDEXES_ENUM = {
+	USERS_EMAIL: "idx_users_email",
+	SESSION_USER_ID: "idx_sessions_user_id",
+	SESSION_TOKEN: "idx_sessions_token",
+	ACCOUNTS_USER_ID: "idx_accounts_user_id",
+	VERIFICATIONS_IDENTIFIER: "idx_verifications_identifier",
+	TAGS_NAME: "idx_tags_name",
+	TAGS_SLUG: "idx_tags_slug",
+	LOCALES_CODE: "idx_locales_code",
+	LOCALES_NAME: "idx_locales_name",
+	MEDIA_NAME: "idx_media_name",
+	MIME_TYPES_MIME_TYPE: "idx_mime_types_mime_type",
 } as const;
 
 /**
@@ -132,6 +148,24 @@ export const MEDIA_TAGS_COLUMN_ENUM = {
 	TAG_ID: "tag_id",
 } as const;
 
+export const STATIC_PAGE_DATA_COLUMN_ENUM = {
+	SLUG: "slug",
+
+	/**
+	 * meta fields
+	 */
+	META_TITLE: "meta_title",
+	META_DESCRIPTION: "meta_description",
+	META_KEYWORDS: "meta_keywords",
+	META_IMAGE_MEDIA_ID: "meta_image_media_id",
+
+	/**
+	 * sitemap fields
+	 */
+	SITEMAP_CHANGE_FREQUENCY: "sitemap_change_frequency",
+	SITEMAP_PRIORITY: "sitemap_priority",
+} as const;
+
 /**
  * constants for schema definitions
  */
@@ -139,8 +173,10 @@ export const USER_ROLE_ENUM = {
 	ADMIN: "admin",
 	USER: "user",
 } as const;
+
 export const USER_ROLE_LIST = [
 	USER_ROLE_ENUM.ADMIN,
 	USER_ROLE_ENUM.USER,
 ] as const;
+
 export const USER_ROLE_DEFAULT = USER_ROLE_ENUM.ADMIN;
