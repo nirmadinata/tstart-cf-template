@@ -6,8 +6,8 @@ export const Route = createFileRoute("/")({
 
 function App() {
 	return (
-		<div className="min-h-screen bg-linear-to-b from-slate-900 via-slate-800 to-slate-900">
-			<p>Test</p>
+		<div className="min-h-screen">
+			<p>Test Landing Page</p>
 		</div>
-	)
+	);
 }

@@ -17,7 +17,7 @@ const handler = new OpenAPIHandler(router, {
 		new SmartCoercionPlugin({
 			schemaConverters: [
 				/**
-				 * We need to use the ZodToJsonSchemaConverter here as well to ensure that
+				 * We need to use the ZodToJsonSchemaConverter here as well to ensure that\
 				 */
 				new ZodToJsonSchemaConverter(),
 			],
@@ -51,6 +51,7 @@ const handler = new OpenAPIHandler(router, {
 					},
 				},
 			},
+
 			docsConfig: {
 				authentication: {
 					securitySchemes: {
@@ -66,14 +67,19 @@ const handler = new OpenAPIHandler(router, {
 
 async function handle({ request }: { request: Request }) {
 	const { response } = await handler.handle(request, {
-		prefix: "/api",
+		prefix: "/api/openapi",
 		context: {},
 	});
 
-	return response ?? new Response("Not Found", { status: 404 });
+	return (
+		response ??
+		new Response("Not Found", {
+			status: 404,
+		})
+	);
 }
 
-export const Route = createFileRoute("/api/$")({
+export const Route = createFileRoute("/api/openapi/$")({
 	server: {
 		handlers: {
 			HEAD: handle,

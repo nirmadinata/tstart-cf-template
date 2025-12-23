@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const t3Env = createEnv({
 	server: {
-		SERVER_URL: z.url().optional(),
+		BETTER_AUTH_SECRET: z.string(),
 	},
 
 	/**
@@ -13,14 +13,20 @@ export const t3Env = createEnv({
 	clientPrefix: "VITE_",
 
 	client: {
-		VITE_APP_TITLE: z.string().min(1).optional(),
+		VITE_BASE_URL: z.url(),
+		VITE_API_URL: z.url(),
+		VITE_RPC_URL: z.url(),
+		VITE_BETTER_AUTH_URL: z.url(),
 	},
 
 	/**
 	 * What object holds the environment variables at runtime. This is usually
 	 * `process.env` or `import.meta.env`.
 	 */
-	runtimeEnv: import.meta.env,
+	runtimeEnv: {
+		...import.meta.env,
+		...process.env,
+	},
 
 	/**
 	 * By default, this library will feed the environment variables directly to

@@ -4,7 +4,7 @@ import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import React from "react";
 
-export const TSDevtools = import.meta.env.DEV
+export const TanStackDevtools = import.meta.env.DEV
 	? React.lazy(() =>
 			import("@tanstack/react-devtools").then((mod) => ({
 				default: mod.TanStackDevtools,
