@@ -7,7 +7,7 @@ import {
 import type { PropsWithChildren } from "react";
 import { Suspense } from "react";
 import { plugins, TanStackDevtools } from "@/integrations/tanstack";
-import appCss from "@/styles.css?url";
+import appCss from "@/styles/styles.css?url";
 
 type RootContext = {
 	queryClient: QueryClient;

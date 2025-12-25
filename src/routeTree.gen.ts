@@ -9,10 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiRpcSplatRouteImport } from './routes/api.rpc.$'
-import { Route as ApiOpenapiSplatRouteImport } from './routes/api.openapi.$'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as ApiOpenapiSplatRouteImport } from './routes/api/openapi.$'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
+import { Route as AdminDashboardProductsRouteImport } from './routes/_admin.dashboard/products'
+import { Route as AdminAuthLoginRouteImport } from './routes/_admin.auth/login'
+import { Route as AdminAuthForgotPasswordRouteImport } from './routes/_admin.auth/forgot-password'
+import { Route as AdminAuthChangePasswordRouteImport } from './routes/_admin.auth/change-password'
 
+const AdminRoute = AdminRouteImport.update({
+  id: '/_admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -28,39 +38,115 @@ const ApiOpenapiSplatRoute = ApiOpenapiSplatRouteImport.update({
   path: '/api/openapi/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDashboardProductsRoute = AdminDashboardProductsRouteImport.update({
+  id: '/dashboard/products',
+  path: '/dashboard/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuthLoginRoute = AdminAuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuthForgotPasswordRoute = AdminAuthForgotPasswordRouteImport.update({
+  id: '/auth/forgot-password',
+  path: '/auth/forgot-password',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuthChangePasswordRoute = AdminAuthChangePasswordRouteImport.update({
+  id: '/auth/change-password',
+  path: '/auth/change-password',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth/change-password': typeof AdminAuthChangePasswordRoute
+  '/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
+  '/auth/login': typeof AdminAuthLoginRoute
+  '/dashboard/products': typeof AdminDashboardProductsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/openapi/$': typeof ApiOpenapiSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/change-password': typeof AdminAuthChangePasswordRoute
+  '/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
+  '/auth/login': typeof AdminAuthLoginRoute
+  '/dashboard/products': typeof AdminDashboardProductsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/openapi/$': typeof ApiOpenapiSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_admin': typeof AdminRouteWithChildren
+  '/_admin/auth/change-password': typeof AdminAuthChangePasswordRoute
+  '/_admin/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
+  '/_admin/auth/login': typeof AdminAuthLoginRoute
+  '/_admin/dashboard/products': typeof AdminDashboardProductsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/openapi/$': typeof ApiOpenapiSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/openapi/$' | '/api/rpc/$'
+  fullPaths:
+    | '/'
+    | '/auth/change-password'
+    | '/auth/forgot-password'
+    | '/auth/login'
+    | '/dashboard/products'
+    | '/api/auth/$'
+    | '/api/openapi/$'
+    | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/openapi/$' | '/api/rpc/$'
-  id: '__root__' | '/' | '/api/openapi/$' | '/api/rpc/$'
+  to:
+    | '/'
+    | '/auth/change-password'
+    | '/auth/forgot-password'
+    | '/auth/login'
+    | '/dashboard/products'
+    | '/api/auth/$'
+    | '/api/openapi/$'
+    | '/api/rpc/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/_admin'
+    | '/_admin/auth/change-password'
+    | '/_admin/auth/forgot-password'
+    | '/_admin/auth/login'
+    | '/_admin/dashboard/products'
+    | '/api/auth/$'
+    | '/api/openapi/$'
+    | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiOpenapiSplatRoute: typeof ApiOpenapiSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -82,11 +168,64 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiOpenapiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_admin/dashboard/products': {
+      id: '/_admin/dashboard/products'
+      path: '/dashboard/products'
+      fullPath: '/dashboard/products'
+      preLoaderRoute: typeof AdminDashboardProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/auth/login': {
+      id: '/_admin/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AdminAuthLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/auth/forgot-password': {
+      id: '/_admin/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AdminAuthForgotPasswordRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/auth/change-password': {
+      id: '/_admin/auth/change-password'
+      path: '/auth/change-password'
+      fullPath: '/auth/change-password'
+      preLoaderRoute: typeof AdminAuthChangePasswordRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAuthChangePasswordRoute: typeof AdminAuthChangePasswordRoute
+  AdminAuthForgotPasswordRoute: typeof AdminAuthForgotPasswordRoute
+  AdminAuthLoginRoute: typeof AdminAuthLoginRoute
+  AdminDashboardProductsRoute: typeof AdminDashboardProductsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAuthChangePasswordRoute: AdminAuthChangePasswordRoute,
+  AdminAuthForgotPasswordRoute: AdminAuthForgotPasswordRoute,
+  AdminAuthLoginRoute: AdminAuthLoginRoute,
+  AdminDashboardProductsRoute: AdminDashboardProductsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiOpenapiSplatRoute: ApiOpenapiSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
