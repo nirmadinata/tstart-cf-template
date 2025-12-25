@@ -11,7 +11,7 @@ export const appenv = createEnv({
 		/**
 		 * plunk email service API key
 		 */
-		PLUNK_API_KEY: z.string().optional(),
+		PLUNK_API_KEY: z.string(),
 	},
 
 	/**
