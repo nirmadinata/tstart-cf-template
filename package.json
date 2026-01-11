@@ -14,11 +14,11 @@
     "cf:typegen": "wrangler types -e local --env-interface CloudflareEnv ./cloudflare-env.d.ts",
     "db:internal:generate": "drizzle-kit generate --config ./src/integrations/internal-db/drizzle.config.ts",
     "db:internal:local:migrate": "wrangler -e local d1 migrations apply internal-db",
-    "db:internal:local:studio": "ENV=local drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.studio-local.ts",
     "db:internal:production:migrate": "wrangler -e production d1 migrations apply internal-db",
+    "db:internal:local:studio": "ENV=local drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.studio-local.ts",
     "db:internal:production:studio": "ENV=production drizzle-kit studio --config ./src/integrations/internal-db/drizzle.config.ts",
-    "email:dev": "email dev -d ./src/components/templates/emails",
-    "email:build": "email build -d ./src/components/templates/emails"
+    "email:dev": "email dev -d ./src/integrations/emails/templates",
+    "email:build": "email build -d ./src/integrations/emails/templates"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.13.8",

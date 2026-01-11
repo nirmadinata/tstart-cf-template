@@ -1,5 +1,76 @@
----
-applyTo: "**/*.{ts,tsx,js,jsx}"
+# Project Context
+
+This is a **TanStack Start** application deployed on **Cloudflare Workers**. It uses **React 19**, **Vite**, **Drizzle ORM** (D1 + SQLite), and **ORPC** for type-safe APIs.
+
+## Tech Stack & Architecture
+
+- **Framework:** TanStack Start (SSR/Client hybrid), TanStack Router (File-based routing).
+- **Runtime:** Cloudflare Workers (via `wrangler`).
+- **Language:** TypeScript (Strict).
+- **Package Manager:** `bun` (Use `bun --bun` for runtime).
+- **Database:** Cloudflare D1 (SQLite) accessed via Drizzle ORM.
+- **API/RPC:** `orpc` (similar to tRPC) for server-client communication.
+- **Styling:** Tailwind CSS v4 + Shadcn UI.
+- **Linting/Formatting:** Biome (via Ultracite).
+
+## Agent Guidelines
+
+**CRITICAL**: This project uses `AGENTS.md` files in key directories to store context-specific instructions.
+
+- `src/components/AGENTS.md`
+- `src/integrations/AGENTS.md`
+- `src/orpc/AGENTS.md`
+- `src/routes/AGENTS.md`
+
+**ALWAYS** read the `AGENTS.md` file in the directory you are working in (or creating files in) before making changes.
+
+**MAINTENANCE RULE**: If you implement a new pattern, add a major library, or change a core architectural decision, you **MUST** update the relevant `AGENTS.md` file or this `copilot-instructions.md` file to reflect the change. Do this _before_ finishing your task.
+
+## Core Workflows
+
+### 1. Development
+
+- Start dev server: `bun --bun run dev`
+- Run typecheck: `bun run check` (Biome)
+
+### 2. Database (Drizzle + Cloudflare D1)
+
+- **Schema:** Located in `src/integrations/internal-db/schema.ts`.
+- **Constants:** ALWAYS use constants from `src/integrations/internal-db/constants.ts` for column names (e.g., `COMMON_COLUMN_ENUM.CREATED_AT`).
+- **Migration Workflow:**
+  1. Modify `schema.ts`.
+  2. Generate migrations: `bun run db:internal:generate`
+  3. Apply to local D1: `bun run db:internal:local:migrate`
+  4. Apply to prod D1: `bun run db:internal:production:migrate` (CI/CD usually handles this, be careful).
+
+### 3. Routing (TanStack Router)
+
+- Routes are in `src/routes/`.
+- Use `createFileRoute` for defining routes.
+- Link: `import { Link } from "@tanstack/react-router"`.
+
+### 4. API & Data Fetching (ORPC)
+
+- **Definition:** Define procedures in `src/orpc/router/` (e.g., `todos.ts`).
+- **Integration:** Export procedures in `src/orpc/router/index.ts`.
+- **Client Usage:**
+  - Import `orpc` from `@/orpc/client`.
+  - Use hooks: `orpc.yourProcedure.useQuery({ ... })` or `orpc.yourProcedure.useMutation()`.
+  - **Do NOT** use `fetch` directly for internal APIs.
+
+### 5. Environment Variables
+
+- Defined in `src/integrations/appenv/index.ts` (using T3 Env).
+- Import: `import { appenv } from "@/integrations/appenv"`.
+
+## Project Structure & Conventions
+
+- `src/integrations/`: ISOLATED modules for third-party services (DB, Email, KV, Auth).
+- `src/orpc/`: API router definitions and client setup.
+- `src/routes/api/`: API entry points (e.g., `rpc.$.ts` mounts the ORPC handler).
+- `src/components/ui/`: Shadcn components.
+- **KV Storage:** Use `src/integrations/internal-kv/index.ts` wrappers instead of raw binding access.
+
 ---
 
 # Ultracite Code Standards
@@ -92,14 +163,17 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 ### Framework-Specific Guidance
 
 **Next.js:**
+
 - Use Next.js `<Image>` component for images
 - Use `next/head` or App Router metadata API for head elements
 - Use Server Components for async data fetching instead of async Client Components
 
 **React 19+:**
+
 - Use ref as a prop instead of `React.forwardRef`
 
 **Solid/Svelte/Vue/Qwik:**
+
 - Use `class` and `for` attributes (not `className` or `htmlFor`)
 
 ---
