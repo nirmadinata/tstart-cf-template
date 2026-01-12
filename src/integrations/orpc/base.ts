@@ -29,6 +29,14 @@ const base = os.$context<AppContext>().errors({
 			fieldErrors: z.record(z.string(), z.array(z.string()).optional()),
 		}),
 	},
+	OUTPUT_VALIDATION_FAILED: {
+		status: 500,
+		message: "The server output validation failed",
+		data: z.object({
+			formErrors: z.array(z.string()),
+			fieldErrors: z.record(z.string(), z.array(z.string()).optional()),
+		}),
+	},
 });
 
 /**

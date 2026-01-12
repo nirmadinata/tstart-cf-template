@@ -1,4 +1,6 @@
+import { env } from "cloudflare:workers";
 import { createFileRoute } from "@tanstack/react-router";
+import { publicApiRouter } from "@/features/api";
 import { getPublicApiHandler } from "@/integrations/orpc/handlers";
 
 export const Route = createFileRoute("/api/public/$")({
@@ -6,8 +8,12 @@ export const Route = createFileRoute("/api/public/$")({
 		handlers: {
 			ANY({ request }) {
 				return (
-					getPublicApiHandler({})
-						.handle(request)
+					getPublicApiHandler(publicApiRouter)
+						.handle(request, {
+							context: {
+								env,
+							},
+						})
 						.then((res) => res.response)
 						.catch(
 							(error) =>

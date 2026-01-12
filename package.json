@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev --port 3000",
-    "build": "vite build",
+    "dev": "CLOUDFLARE_ENV=local vite dev --port 3000",
+    "build": "CLOUDFLARE_ENV=production vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "format": "biome format --fix",

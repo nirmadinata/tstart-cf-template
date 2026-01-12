@@ -7,7 +7,7 @@ import {
 } from "@orpc/openapi/plugins";
 import type { Context } from "@orpc/server";
 import { ValidationError } from "@orpc/server";
-import { ZodToJsonSchemaConverter } from "@orpc/zod";
+import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import z from "zod";
 
 const schemaConverters: ConditionalSchemaConverter[] = [
@@ -25,8 +25,15 @@ function createHandler<Router extends {}>(
 				...openApiOptions,
 			}),
 		],
+		interceptors: [
+			onError((error) => {
+				console.log(error);
+			}),
+		],
 		clientInterceptors: [
 			onError((error) => {
+				console.log(error);
+
 				/**
 				 * skip check if not ORPCError or not ValidationError
 				 */
