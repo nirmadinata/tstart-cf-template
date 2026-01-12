@@ -17,7 +17,7 @@ import {
 	MEDIA_MIME_TYPE_COLUMN_ENUM,
 	MEDIA_TAGS_COLUMN_ENUM,
 	SESSION_COLUMN_ENUM,
-	TABLE_ENUM,
+	TABLE_ALIASES,
 	TAGS_COLUMN_ENUM,
 	USER_COLUMN_ENUM,
 	USER_ROLE_DEFAULT,
@@ -56,7 +56,7 @@ const COMMON_AUTHORED_COLUMNS = {
  * tables
  */
 export const users = sqliteTable(
-	TABLE_ENUM.USERS,
+	TABLE_ALIASES.USERS,
 	{
 		...COMMON_COLUMNS,
 
@@ -126,7 +126,7 @@ export const users = sqliteTable(
 	]
 );
 export const sessions = sqliteTable(
-	TABLE_ENUM.SESSIONS,
+	TABLE_ALIASES.SESSIONS,
 	{
 		...COMMON_COLUMNS,
 
@@ -170,7 +170,7 @@ export const sessions = sqliteTable(
 	]
 );
 export const accounts = sqliteTable(
-	TABLE_ENUM.ACCOUNTS,
+	TABLE_ALIASES.ACCOUNTS,
 	{
 		...COMMON_COLUMNS,
 
@@ -218,7 +218,7 @@ export const accounts = sqliteTable(
 	]
 );
 export const verifications = sqliteTable(
-	TABLE_ENUM.VERIFICATIONS,
+	TABLE_ALIASES.VERIFICATIONS,
 	{
 		...COMMON_COLUMNS,
 
@@ -252,7 +252,7 @@ export const verifications = sqliteTable(
 );
 
 export const tags = sqliteTable(
-	TABLE_ENUM.TAGS,
+	TABLE_ALIASES.TAGS,
 	{
 		...COMMON_COLUMNS,
 		...COMMON_AUTHORED_COLUMNS,
@@ -282,7 +282,7 @@ export const tags = sqliteTable(
 );
 
 export const locales = sqliteTable(
-	TABLE_ENUM.LOCALES,
+	TABLE_ALIASES.LOCALES,
 	{
 		...COMMON_COLUMNS,
 		...COMMON_AUTHORED_COLUMNS,
@@ -315,7 +315,7 @@ export const locales = sqliteTable(
 );
 
 export const mimeTypes = sqliteTable(
-	TABLE_ENUM.MIME_TYPES,
+	TABLE_ALIASES.MIME_TYPES,
 	{
 		...COMMON_COLUMNS,
 		...COMMON_AUTHORED_COLUMNS,
@@ -344,7 +344,7 @@ export const mimeTypes = sqliteTable(
 );
 
 export const medias = sqliteTable(
-	TABLE_ENUM.MEDIAS,
+	TABLE_ALIASES.MEDIAS,
 	{
 		...COMMON_COLUMNS,
 		...COMMON_AUTHORED_COLUMNS,
@@ -396,7 +396,7 @@ export const medias = sqliteTable(
 );
 
 export const mediaTags = sqliteTable(
-	TABLE_ENUM.MEDIA_TAGS,
+	TABLE_ALIASES.MEDIA_TAGS,
 	{
 		...COMMON_COLUMNS,
 

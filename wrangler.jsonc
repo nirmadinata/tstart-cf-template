@@ -36,7 +36,7 @@
       "kv_namespaces": [
         {
           "binding": "INTERNAL_KV",
-          "id": ""
+          "id": "internal-kv"
         }
       ],
       "d1_databases": [
