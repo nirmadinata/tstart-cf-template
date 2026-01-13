@@ -7,12 +7,9 @@ import type { DB } from "better-auth/adapters/drizzle";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 import { admin, openAPI } from "better-auth/plugins";
-import { type GetInternalDB, getDB } from "@/integrations/internal-db";
-import {
-	COLUMN_ALIASES,
-	TABLE_ALIASES,
-} from "@/integrations/internal-db/constants";
-import { getKV } from "@/integrations/internal-kv";
+import { type GetInternalDB, getDB } from "@/integrations/db";
+import { COLUMN_ALIASES, TABLE_ALIASES } from "@/integrations/db/constants";
+import { getKV } from "@/integrations/kv";
 import { ac, ROLE_ENUM, roles } from "./constants";
 
 export * from "./constants";

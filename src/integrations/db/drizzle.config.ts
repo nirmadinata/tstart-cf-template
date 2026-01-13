@@ -11,8 +11,8 @@ if (process.env.ENV === "production") {
 config({ path });
 
 export default defineConfig({
-	out: "./src/integrations/internal-db/migrations",
-	schema: "./src/integrations/internal-db/schema.ts",
+	out: "./src/integrations/db/migrations",
+	schema: "./src/integrations/db/schema.ts",
 	dialect: "sqlite",
 	driver: "d1-http",
 	dbCredentials: {

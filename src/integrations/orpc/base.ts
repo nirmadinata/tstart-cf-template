@@ -2,8 +2,8 @@ import { os } from "@orpc/server";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import z from "zod";
 import { getAuth } from "@/integrations/auth";
-import { getDB } from "@/integrations/internal-db";
-import { getKV } from "@/integrations/internal-kv";
+import { getDB } from "@/integrations/db";
+import { getKV } from "@/integrations/kv";
 import type { AppContext } from "@/integrations/orpc/types";
 
 export const base = os.$context<AppContext>().errors({

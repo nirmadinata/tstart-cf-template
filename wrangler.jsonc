@@ -21,10 +21,10 @@
       "d1_databases": [
         {
           "binding": "INTERNAL_DB",
-          "migrations_dir": "./src/integrations/internal-db/migrations",
+          "migrations_dir": "./src/integrations/db/migrations",
           "remote": false,
-          "database_id": "internal-db",
-          "database_name": "internal-db"
+          "database_id": "db",
+          "database_name": "db"
         }
       ]
     },
@@ -42,9 +42,9 @@
       "d1_databases": [
         {
           "binding": "INTERNAL_DB",
-          "migrations_dir": "./src/integrations/internal-db/migrations",
-          "database_id": "internal-db",
-          "database_name": "internal-db"
+          "migrations_dir": "./src/integrations/db/migrations",
+          "database_id": "db",
+          "database_name": "db"
         }
       ]
     }

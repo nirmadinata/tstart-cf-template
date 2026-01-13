@@ -19,7 +19,7 @@ This is a **TanStack Start** application deployed on **Cloudflare Workers**. It 
 
 - `src/components/AGENTS.md`
 - `src/integrations/AGENTS.md`
-- `src/orpc/AGENTS.md`
+- `src/features/api/AGENTS.md`
 - `src/routes/AGENTS.md`
 
 **ALWAYS** read the `AGENTS.md` file in the directory you are working in (or creating files in) before making changes.
@@ -35,13 +35,13 @@ This is a **TanStack Start** application deployed on **Cloudflare Workers**. It 
 
 ### 2. Database (Drizzle + Cloudflare D1)
 
-- **Schema:** Located in `src/integrations/internal-db/schema.ts`.
-- **Constants:** ALWAYS use constants from `src/integrations/internal-db/constants.ts` for column names (e.g., `COMMON_COLUMN_ENUM.CREATED_AT`).
+- **Schema:** Located in `src/integrations/db/schema.ts`.
+- **Constants:** ALWAYS use constants from `src/integrations/db/constants.ts` for column names (e.g., `COMMON_COLUMN_ENUM.CREATED_AT`).
 - **Migration Workflow:**
   1. Modify `schema.ts`.
-  2. Generate migrations: `bun run db:internal:generate`
-  3. Apply to local D1: `bun run db:internal:local:migrate`
-  4. Apply to prod D1: `bun run db:internal:production:migrate` (CI/CD usually handles this, be careful).
+  2. Generate migrations: `bun run db:generate`
+  3. Apply to local D1: `bun run db:local:migrate`
+  4. Apply to prod D1: `bun run db:production:migrate` (CI/CD usually handles this, be careful).
 
 ### 3. Routing (TanStack Router)
 
@@ -51,11 +51,11 @@ This is a **TanStack Start** application deployed on **Cloudflare Workers**. It 
 
 ### 4. API & Data Fetching (ORPC)
 
-- **Definition:** Define procedures in `src/orpc/router/` (e.g., `todos.ts`).
-- **Integration:** Export procedures in `src/orpc/router/index.ts`.
+- **Definition:** Define procedures in `src/features/api/`. `public-api` and `admin-api` are separated.
+- **Rules:**
+  - Input/Output schemas in `.schema.ts`.
+  - Implementation in `.ts` using `base` builder from `@/integrations/orpc/base`.
 - **Client Usage:**
-  - Import `orpc` from `@/orpc/client`.
-  - Use hooks: `orpc.yourProcedure.useQuery({ ... })` or `orpc.yourProcedure.useMutation()`.
   - **Do NOT** use `fetch` directly for internal APIs.
 
 ### 5. Environment Variables
@@ -65,11 +65,11 @@ This is a **TanStack Start** application deployed on **Cloudflare Workers**. It 
 
 ## Project Structure & Conventions
 
-- `src/integrations/`: ISOLATED modules for third-party services (DB, Email, KV, Auth).
-- `src/orpc/`: API router definitions and client setup.
-- `src/routes/api/`: API entry points (e.g., `rpc.$.ts` mounts the ORPC handler).
+- `src/integrations/`: ISOLATED modules for third-party services (DB, Email, KV, Auth, ORPC infra).
+- `src/features/api/`: API router definitions and procedures.
+- `src/routes/api/`: API entry points (e.g., `admin.$.ts` mounts the ORPC handler).
 - `src/components/ui/`: Shadcn components.
-- **KV Storage:** Use `src/integrations/internal-kv/index.ts` wrappers instead of raw binding access.
+- **KV Storage:** Use `src/integrations/kv/index.ts` wrappers instead of raw binding access.
 
 ---
 
