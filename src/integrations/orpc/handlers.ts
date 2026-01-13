@@ -1,5 +1,4 @@
 import { ORPCError, onError } from "@orpc/client";
-import type { ConditionalSchemaConverter } from "@orpc/openapi";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import {
 	OpenAPIReferencePlugin,
@@ -10,18 +9,14 @@ import { ValidationError } from "@orpc/server";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import z from "zod";
 
-const schemaConverters: ConditionalSchemaConverter[] = [
-	new ZodToJsonSchemaConverter(),
-];
-
-function createHandler<Router extends {}>(
+export function createHandler<Router extends {}>(
 	router: Router,
 	openApiOptions: OpenAPIReferencePluginOptions<Context>
 ) {
 	return new OpenAPIHandler(router, {
 		plugins: [
 			new OpenAPIReferencePlugin({
-				schemaConverters,
+				schemaConverters: [new ZodToJsonSchemaConverter()],
 				...openApiOptions,
 			}),
 		],
@@ -91,43 +86,4 @@ function createHandler<Router extends {}>(
 	});
 }
 
-type CreateHandlerType = ReturnType<typeof createHandler>;
-
-/**
- * singleton accessor for ORPC handler
- */
-let _adminAPIHandler: CreateHandlerType | null = null;
-let _publicAPIHandler: CreateHandlerType | null = null;
-
-/**
- * get API handler
- */
-export function getAdminApiHandler<Router extends {}>(router: Router) {
-	_adminAPIHandler ??= createHandler(router, {
-		docsTitle: "CMS Admin API Docs",
-		docsPath: "/api/admin",
-		specPath: "/api/admin/docs.json",
-		specGenerateOptions: {
-			info: {
-				title: "CMS Admin API Docs",
-				version: "1.0.0",
-			},
-		},
-	});
-	return _adminAPIHandler;
-}
-
-export function getPublicApiHandler<Router extends {}>(router: Router) {
-	_publicAPIHandler ??= createHandler(router, {
-		docsTitle: "Public API Docs",
-		docsPath: "/api/public",
-		specPath: "/api/public/docs.json",
-		specGenerateOptions: {
-			info: {
-				title: "Public API Docs",
-				version: "1.0.0",
-			},
-		},
-	});
-	return _publicAPIHandler;
-}
+export type CreateHandlerType = ReturnType<typeof createHandler>;

@@ -3,9 +3,16 @@ import {
 	getProductByIdOutputSchema,
 	listProductOutputSchema,
 } from "@/features/api/lib/public-api/product.schema";
-import { publicAPIBase } from "@/integrations/orpc/base";
 
-export const listProduct = publicAPIBase
+import {
+	base,
+	initStorageMiddleware,
+	injectHeadersMiddleware,
+} from "@/integrations/orpc/base";
+
+const builder = base.use(injectHeadersMiddleware).use(initStorageMiddleware);
+
+export const listProduct = builder
 	.route({
 		method: "GET",
 		path: "/products",
@@ -42,7 +49,7 @@ export const listProduct = publicAPIBase
 		};
 	});
 
-export const getProductById = publicAPIBase
+export const getProductById = builder
 	.route({
 		method: "GET",
 		path: "/products/{id}",

@@ -1,11 +1,12 @@
 import { os } from "@orpc/server";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import z from "zod";
 import { getAuth } from "@/integrations/auth";
 import { getDB } from "@/integrations/internal-db";
 import { getKV } from "@/integrations/internal-kv";
 import type { AppContext } from "@/integrations/orpc/types";
 
-const base = os.$context<AppContext>().errors({
+export const base = os.$context<AppContext>().errors({
 	INTERNAL_SERVER_ERROR: {
 		message: "An internal server error occurred",
 	},
@@ -43,6 +44,15 @@ const base = os.$context<AppContext>().errors({
  * middlewares
  */
 
+export const injectHeadersMiddleware = base.middleware(({ context, next }) =>
+	next({
+		context: {
+			...context,
+			headers: getRequestHeaders(),
+		},
+	})
+);
+
 export const initStorageMiddleware = base.middleware(({ context, next }) =>
 	next({
 		context: {
@@ -63,8 +73,9 @@ export const initAuthenticationMiddleware = base.middleware(
 		})
 );
 
-export const ensureAdminMiddleware = initAuthenticationMiddleware.concat(
-	async ({ context, next, errors }) => {
+export const ensureAdminMiddleware = injectHeadersMiddleware
+	.concat(initAuthenticationMiddleware)
+	.concat(async ({ context, next, errors }) => {
 		const session = await context.auth.api.getSession({
 			headers: context.headers,
 		});
@@ -80,10 +91,4 @@ export const ensureAdminMiddleware = initAuthenticationMiddleware.concat(
 				user: session.user,
 			},
 		});
-	}
-);
-
-export const adminAPIBase = base
-	.use(initStorageMiddleware)
-	.use(initAuthenticationMiddleware);
-export const publicAPIBase = base.use(initStorageMiddleware);
+	});
