@@ -7,7 +7,7 @@ import {
 import type { Context } from "@orpc/server";
 import { ValidationError } from "@orpc/server";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
-import z from "zod";
+import { z } from "zod";
 
 export function createHandler<Router extends {}>(
 	router: Router,
