@@ -26,6 +26,31 @@ This is a **TanStack Start** application deployed on **Cloudflare Workers**. It 
 
 **MAINTENANCE RULE**: If you implement a new pattern, add a major library, or change a core architectural decision, you **MUST** update the relevant `AGENTS.md` file or this `copilot-instructions.md` file to reflect the change. Do this _before_ finishing your task.
 
+## Critical Libraries & Best Practices
+
+### 1. Database (Drizzle ORM)
+
+- **Strict Schema**: Column/Table names are defined in `src/integrations/db/constants.ts`. **ALWAYS** use these constants.
+- **Conventions**: The DB uses `snake_case`. Drizzle handles the mapping.
+- **Migrations**: Always run `bun run db:generate` after `schema.ts` changes.
+
+### 2. API (ORPC)
+
+- **Type-Safe**: Use `@/features/api` for definitions.
+- **Input/Output**: Define Zod schemas in `.schema.ts` files adjacent to usage.
+- **No Fetch**: Never use `fetch()` for internal API calls. Use the `orpc` client hooks.
+
+### 3. Routing (TanStack Start)
+
+- **Server/Client**: Use `loader` in `createFileRoute` for server-side logic.
+- **Layouts**: Use `_` prefix for layout files.
+- **Links**: Use `<Link>` component, not `<a>`.
+
+### 4. Auth (Better Auth)
+
+- **Integration**: Wrappers are in `@/integrations/auth`.
+- **Schema**: Auth tables are also governed by `constants.ts`.
+
 ## Core Workflows
 
 ### 1. Development
@@ -62,6 +87,17 @@ This is a **TanStack Start** application deployed on **Cloudflare Workers**. It 
 
 - Defined in `src/integrations/appenv/index.ts` (using T3 Env).
 - Import: `import { appenv } from "@/integrations/appenv"`.
+
+## Documentation Maintenance
+
+**IMPORTANT**: If you add a new library or integration to this project, you **MUST**:
+
+1.  **Analyze**: Understand its purpose, "Do's and Don'ts", and optimal usage pattern.
+2.  **Document**: Add a section to the relevant `AGENTS.md` file containing:
+    - Library Name & Doc Link.
+    - Critical Implementation Guidelines.
+    - Best Practices (Do's/Don'ts).
+3.  **Update**: Add a brief summary to this `copilot-instructions.md` file under "Critical Libraries".
 
 ## Project Structure & Conventions
 
