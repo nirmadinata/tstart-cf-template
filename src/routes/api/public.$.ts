@@ -1,8 +1,10 @@
 import { env } from "cloudflare:workers";
 import { createFileRoute } from "@tanstack/react-router";
 import { publicApiRouter } from "@/features/api";
+import type {
+	CreateHandlerType,
+} from "@/integrations/orpc/handlers";
 import {
-	type CreateHandlerType,
 	createHandler,
 } from "@/integrations/orpc/handlers";
 

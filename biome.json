@@ -15,7 +15,8 @@
       "!**/src/routeTree.gen.ts",
       "!**/src/styles.css",
       "!**/cloudflare-env.d.ts",
-      "!**/bun.lock"
+      "!**/bun.lock",
+      "!**/components/ui"
     ]
   },
   "formatter": {
@@ -33,6 +34,14 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "style": {
+        "useImportType": {
+          "level": "error",
+          "options": {
+            "style": "separatedType"
+          }
+        }
+      },
       "performance": {
         "noNamespaceImport": "off",
         "noBarrelFile": "off"

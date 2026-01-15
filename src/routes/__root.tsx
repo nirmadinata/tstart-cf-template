@@ -5,7 +5,8 @@ import {
 	HeadContent,
 	Scripts,
 } from "@tanstack/react-router";
-import { type PropsWithChildren, Suspense } from "react";
+import type { PropsWithChildren, } from "react";
+import { Suspense } from "react";
 import { plugins } from "@/integrations/tanstack";
 import appCss from "@/styles/styles.css?url";
 

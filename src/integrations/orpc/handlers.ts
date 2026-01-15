@@ -1,8 +1,10 @@
 import { ORPCError, onError } from "@orpc/client";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
+import type {
+	OpenAPIReferencePluginOptions,
+} from "@orpc/openapi/plugins";
 import {
 	OpenAPIReferencePlugin,
-	type OpenAPIReferencePluginOptions,
 } from "@orpc/openapi/plugins";
 import type { Context } from "@orpc/server";
 import { ValidationError } from "@orpc/server";
