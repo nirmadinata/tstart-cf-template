@@ -5,6 +5,7 @@ export const listProductOutputSchema = z.object({
 		z.object({
 			id: z.string(),
 			name: z.string(),
+			description: z.string().optional(),
 			price: z.number(),
 		})
 	),
@@ -24,5 +25,6 @@ export const getProductByIdInputSchema = z.object({
 export const getProductByIdOutputSchema = z.object({
 	id: z.string(),
 	name: z.string(),
+	description: z.string().optional(),
 	price: z.number(),
 });

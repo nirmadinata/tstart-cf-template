@@ -66,6 +66,7 @@ export const getProductById = builder
 		return {
 			id: input.id,
 			name: "Sample Product",
+			description: "This is a sample product.",
 			price: 19.99,
 		};
 	});

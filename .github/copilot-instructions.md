@@ -51,6 +51,13 @@ This is a **TanStack Start** application deployed on **Cloudflare Workers**. It 
 - **Integration**: Wrappers are in `@/integrations/auth`.
 - **Schema**: Auth tables are also governed by `constants.ts`.
 
+### 5. Email (Plunk + React Email)
+
+- **Integration**: `@/integrations/email`.
+- **Sending**: `getEmailClient(env).send({...})`.
+- **Templates**: React components in `@/integrations/email/templates`.
+- **Dev**: Run `bun run email:dev` to preview templates.
+
 ## Core Workflows
 
 ### 1. Development
@@ -83,10 +90,11 @@ This is a **TanStack Start** application deployed on **Cloudflare Workers**. It 
 - **Client Usage:**
   - **Do NOT** use `fetch` directly for internal APIs.
 
-### 5. Environment Variables
+### 6. Environment Variables
 
 - Defined in `src/integrations/appenv/index.ts` (using T3 Env).
-- Import: `import { appenv } from "@/integrations/appenv"`.
+- **Client**: Prefix with `VITE_`.
+- **Import**: `import { appenv } from "@/integrations/appenv"`.
 
 ## Documentation Maintenance
 
@@ -194,23 +202,14 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Use top-level regex literals instead of creating them in loops
 - Prefer specific imports over namespace imports
 - Avoid barrel files (index files that re-export everything)
-- Use proper image components (e.g., Next.js `<Image>`) over `<img>` tags
 
 ### Framework-Specific Guidance
-
-**Next.js:**
-
-- Use Next.js `<Image>` component for images
-- Use `next/head` or App Router metadata API for head elements
-- Use Server Components for async data fetching instead of async Client Components
 
 **React 19+:**
 
 - Use ref as a prop instead of `React.forwardRef`
-
-**Solid/Svelte/Vue/Qwik:**
-
-- Use `class` and `for` attributes (not `className` or `htmlFor`)
+- Use `use()` API for Promise unwrapping where appropriate
+- Use `<Link>` from `@tanstack/react-router` for navigation
 
 ---
 

@@ -44,6 +44,26 @@
 - **Do's**: Always use the wrapper to ensure consistent typing and potential future abstraction.
 - **Don'ts**: Do not access `env.INTERNAL_KV` directly in business logic.
 
+### `email` (Plunk + React Email)
+- **Library**: `@plunk/node`, `@react-email/components`.
+- **Access**: Use `getEmailClient(env).send({...})`.
+- **Templates**: Located in `src/integrations/email/templates`.
+- **Do's**:
+  - Create new templates in `templates/` directory as functional components.
+  - Use `getEmailClient(env)` to send emails.
+- **Don'ts**:
+  - Do not use `fetch` to call email APIs directly.
+  - Do not put hardcoded HTML strings in the email body; use React components.
+
+### `appenv` (Environment Variables)
+- **Library**: `@t3-oss/env-core`.
+- **Purpose**: Validate and type-safe environment variables.
+- **Do's**:
+  - Add new variables to `server` or `client` schemas in `src/integrations/appenv/index.ts`.
+  - Use `appenv.MY_VAR` to access variables.
+- **Don'ts**:
+  - Do not use `process.env` or `import.meta.env` directly in feature code (except in specific config files like vite config).
+
 ## Maintenance Rules
 
 - If you add a new integration (e.g., `stripe`, `redis`), create a new folder and follow the `index.ts` export pattern.
