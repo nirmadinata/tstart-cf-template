@@ -1,27 +1,10 @@
 import { ORPCError, onError } from "@orpc/client";
-import { OpenAPIHandler } from "@orpc/openapi/fetch";
-import type {
-	OpenAPIReferencePluginOptions,
-} from "@orpc/openapi/plugins";
-import {
-	OpenAPIReferencePlugin,
-} from "@orpc/openapi/plugins";
-import type { Context } from "@orpc/server";
 import { ValidationError } from "@orpc/server";
-import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
+import { RPCHandler } from "@orpc/server/fetch";
 import { z } from "zod";
 
-export function createHandler<Router extends {}>(
-	router: Router,
-	openApiOptions: OpenAPIReferencePluginOptions<Context>
-) {
-	return new OpenAPIHandler(router, {
-		plugins: [
-			new OpenAPIReferencePlugin({
-				schemaConverters: [new ZodToJsonSchemaConverter()],
-				...openApiOptions,
-			}),
-		],
+export function createHandler<Router extends {}>(router: Router) {
+	return new RPCHandler(router, {
 		interceptors: [
 			onError((error) => {
 				console.log(error);

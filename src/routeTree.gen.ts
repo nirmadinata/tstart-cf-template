@@ -11,8 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiPublicSplatRouteImport } from './routes/api/public.$'
-import { Route as ApiAdminSplatRouteImport } from './routes/api/admin.$'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as AdminDashboardProductsRouteImport } from './routes/_admin.dashboard/products'
 import { Route as AdminAuthLoginRouteImport } from './routes/_admin.auth/login'
 import { Route as AdminAuthForgotPasswordRouteImport } from './routes/_admin.auth/forgot-password'
@@ -27,14 +26,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicSplatRoute = ApiPublicSplatRouteImport.update({
-  id: '/api/public/$',
-  path: '/api/public/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAdminSplatRoute = ApiAdminSplatRouteImport.update({
-  id: '/api/admin/$',
-  path: '/api/admin/$',
+const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
+  id: '/api/rpc/$',
+  path: '/api/rpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDashboardProductsRoute = AdminDashboardProductsRouteImport.update({
@@ -64,8 +58,7 @@ export interface FileRoutesByFullPath {
   '/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
   '/auth/login': typeof AdminAuthLoginRoute
   '/dashboard/products': typeof AdminDashboardProductsRoute
-  '/api/admin/$': typeof ApiAdminSplatRoute
-  '/api/public/$': typeof ApiPublicSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -73,8 +66,7 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
   '/auth/login': typeof AdminAuthLoginRoute
   '/dashboard/products': typeof AdminDashboardProductsRoute
-  '/api/admin/$': typeof ApiAdminSplatRoute
-  '/api/public/$': typeof ApiPublicSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -84,8 +76,7 @@ export interface FileRoutesById {
   '/_admin/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
   '/_admin/auth/login': typeof AdminAuthLoginRoute
   '/_admin/dashboard/products': typeof AdminDashboardProductsRoute
-  '/api/admin/$': typeof ApiAdminSplatRoute
-  '/api/public/$': typeof ApiPublicSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -95,8 +86,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/dashboard/products'
-    | '/api/admin/$'
-    | '/api/public/$'
+    | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -104,8 +94,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/dashboard/products'
-    | '/api/admin/$'
-    | '/api/public/$'
+    | '/api/rpc/$'
   id:
     | '__root__'
     | '/'
@@ -114,15 +103,13 @@ export interface FileRouteTypes {
     | '/_admin/auth/forgot-password'
     | '/_admin/auth/login'
     | '/_admin/dashboard/products'
-    | '/api/admin/$'
-    | '/api/public/$'
+    | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
-  ApiAdminSplatRoute: typeof ApiAdminSplatRoute
-  ApiPublicSplatRoute: typeof ApiPublicSplatRoute
+  ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -141,18 +128,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/$': {
-      id: '/api/public/$'
-      path: '/api/public/$'
-      fullPath: '/api/public/$'
-      preLoaderRoute: typeof ApiPublicSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/admin/$': {
-      id: '/api/admin/$'
-      path: '/api/admin/$'
-      fullPath: '/api/admin/$'
-      preLoaderRoute: typeof ApiAdminSplatRouteImport
+    '/api/rpc/$': {
+      id: '/api/rpc/$'
+      path: '/api/rpc/$'
+      fullPath: '/api/rpc/$'
+      preLoaderRoute: typeof ApiRpcSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_admin/dashboard/products': {
@@ -205,8 +185,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
-  ApiAdminSplatRoute: ApiAdminSplatRoute,
-  ApiPublicSplatRoute: ApiPublicSplatRoute,
+  ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

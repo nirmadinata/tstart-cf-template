@@ -11,7 +11,7 @@ export const appenv = createEnv({
 		/**
 		 * plunk email service API key
 		 */
-		PLUNK_API_KEY: z.string(),
+		EMAIL_API_KEY: z.string(),
 	},
 
 	/**
@@ -25,11 +25,6 @@ export const appenv = createEnv({
 		 * our website base URL
 		 */
 		VITE_BASE_URL: z.url(),
-
-		/**
-		 * our API base URL
-		 */
-		VITE_API_URL: z.url(),
 
 		/**
 		 * the RPC URL for blockchain interactions

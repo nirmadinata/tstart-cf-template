@@ -1,40 +1,29 @@
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { RouterClient } from "@orpc/server";
+import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
-import type { AdminAPIRouterType, PublicAPIRouterType } from "@/features/api";
+import type { RouterType } from "@/features/api";
 import { appenv } from "@/integrations/appenv";
 
-type PublicRouterClient = RouterClient<PublicAPIRouterType>;
-type AdminRouterClient = RouterClient<AdminAPIRouterType>;
+type RPCClient = RouterClient<RouterType>;
 
-export const getPublicClientLink = createIsomorphicFn()
+export const getRPCClientLink = createIsomorphicFn()
 	.client(() =>
-		createORPCClient<PublicRouterClient>(
-			new RPCLink({ url: appenv.VITE_API_URL })
-		)
-	)
-	.server(() =>
-		createORPCClient<PublicRouterClient>(
+		createORPCClient<RPCClient>(
 			new RPCLink({
-				url: appenv.VITE_API_URL,
-				headers: () => getRequestHeaders(),
+				url: appenv.VITE_RPC_URL,
 			})
 		)
-	);
-
-export const getAdminClientLink = createIsomorphicFn()
-	.client(() =>
-		createORPCClient<AdminRouterClient>(
-			new RPCLink({ url: appenv.VITE_RPC_URL })
-		)
 	)
 	.server(() =>
-		createORPCClient<AdminRouterClient>(
+		createORPCClient<RPCClient>(
 			new RPCLink({
 				url: appenv.VITE_RPC_URL,
 				headers: () => getRequestHeaders(),
 			})
 		)
 	);
+
+export const rpcClient = createTanstackQueryUtils(getRPCClientLink());
