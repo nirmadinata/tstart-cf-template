@@ -15,7 +15,7 @@ export const TABLE_ALIASES = {
 	 */
 	LOCALES: "locales",
 	TAGS: "tags",
-	STATIC_PAGE_METADATAS: "static_page_metadatas",
+	STATIC_PAGE_DATA: "static_page_data",
 
 	/**
 	 * media related
@@ -103,33 +103,6 @@ export const COMMON_AUTHORED_COLUMN_ENUM = {
 } as const;
 
 /**
- * actual column names for each table
- */
-
-export const MEDIA_TAGS_COLUMN_ENUM = {
-	MEDIA_ID: "media_id",
-	TAG_ID: "tag_id",
-} as const;
-
-export const STATIC_PAGE_DATA_COLUMN_ENUM = {
-	SLUG: "slug",
-
-	/**
-	 * meta fields
-	 */
-	META_TITLE: "meta_title",
-	META_DESCRIPTION: "meta_description",
-	META_KEYWORDS: "meta_keywords",
-	META_IMAGE_MEDIA_ID: "meta_image_media_id",
-
-	/**
-	 * sitemap fields
-	 */
-	SITEMAP_CHANGE_FREQUENCY: "sitemap_change_frequency",
-	SITEMAP_PRIORITY: "sitemap_priority",
-} as const;
-
-/**
  * constants for schema definitions
  */
 export const USER_ROLE_ENUM = {
@@ -143,3 +116,23 @@ export const USER_ROLE_LIST = [
 ] as const;
 
 export const USER_ROLE_DEFAULT = USER_ROLE_ENUM.ADMIN;
+
+export const SITEMAP_CHANGEFREQ_ENUM = {
+	ALWAYS: "always",
+	HOURLY: "hourly",
+	DAILY: "daily",
+	WEEKLY: "weekly",
+	MONTHLY: "monthly",
+	YEARLY: "yearly",
+	NEVER: "never",
+} as const;
+
+export const SITEMAP_CHANGEFREQ_LIST = [
+	SITEMAP_CHANGEFREQ_ENUM.ALWAYS,
+	SITEMAP_CHANGEFREQ_ENUM.HOURLY,
+	SITEMAP_CHANGEFREQ_ENUM.DAILY,
+	SITEMAP_CHANGEFREQ_ENUM.WEEKLY,
+	SITEMAP_CHANGEFREQ_ENUM.MONTHLY,
+	SITEMAP_CHANGEFREQ_ENUM.YEARLY,
+	SITEMAP_CHANGEFREQ_ENUM.NEVER,
+] as const;

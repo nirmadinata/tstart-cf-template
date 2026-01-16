@@ -3,6 +3,7 @@ import {
 	index,
 	int,
 	primaryKey,
+	real,
 	sqliteTable,
 	text,
 } from "drizzle-orm/sqlite-core";
@@ -10,6 +11,7 @@ import {
 import {
 	COLUMN_ALIASES,
 	INDEXES_ENUM,
+	SITEMAP_CHANGEFREQ_LIST,
 	TABLE_ALIASES,
 	USER_ROLE_DEFAULT,
 	USER_ROLE_LIST,
@@ -403,6 +405,39 @@ export const mediaTags = sqliteTable(
 		/**
 		 * indexes
 		 */
+	]
+);
+
+export const staticPageDatas = sqliteTable(
+	TABLE_ALIASES.STATIC_PAGE_DATA,
+	{
+		...COMMON_COLUMNS,
+		...COMMON_AUTHORED_COLUMNS,
+
+		id: int(COLUMN_ALIASES.COMMON_COLUMNS.ID),
+
+		slug: text("slug").notNull().unique(),
+		metaTitle: text("meta_title"),
+		metaDescription: text("meta_description"),
+		metaKeywords: text("meta_keywords", { mode: "json" }).$type<string[]>(),
+
+		sitemapChangeFrequency: text("sitemap_change_frequency", {
+			enum: SITEMAP_CHANGEFREQ_LIST,
+		}),
+		sitemapPriority: real("sitemap_priority"),
+	},
+	(table) => [
+		/**
+		 * primary key
+		 */
+		primaryKey({
+			columns: [table.id],
+		}),
+
+		/**
+		 * indexes
+		 */
+		index("idx_static_page_data_slug").on(table.slug),
 	]
 );
 
