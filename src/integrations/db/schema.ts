@@ -8,30 +8,21 @@ import {
 } from "drizzle-orm/sqlite-core";
 
 import {
-	ACCOUNT_COLUMN_ENUM,
-	COMMON_AUTHORED_COLUMN_ENUM,
-	COMMON_COLUMN_ENUM,
+	COLUMN_ALIASES,
 	INDEXES_ENUM,
-	LOCALE_COLUMN_ENUM,
-	MEDIA_COLUMN_ENUM,
-	MEDIA_MIME_TYPE_COLUMN_ENUM,
-	MEDIA_TAGS_COLUMN_ENUM,
-	SESSION_COLUMN_ENUM,
 	TABLE_ALIASES,
-	TAGS_COLUMN_ENUM,
-	USER_COLUMN_ENUM,
 	USER_ROLE_DEFAULT,
 	USER_ROLE_LIST,
-	VERIFICATION_COLUMN_ENUM,
 } from "@/integrations/db/constants";
 
 const COMMON_COLUMNS = {
-	[COMMON_COLUMN_ENUM.CREATED_AT]: int({
+	createdAt: int(COLUMN_ALIASES.COMMON_COLUMNS.CREATED_AT, {
 		mode: "timestamp",
 	})
 		.notNull()
 		.$default(() => new Date()),
-	[COMMON_COLUMN_ENUM.UPDATED_AT]: int({
+
+	updatedAt: int(COLUMN_ALIASES.COMMON_COLUMNS.UPDATED_AT, {
 		mode: "timestamp",
 	})
 		.notNull()
@@ -40,16 +31,12 @@ const COMMON_COLUMNS = {
 } as const;
 
 const COMMON_AUTHORED_COLUMNS = {
-	[COMMON_AUTHORED_COLUMN_ENUM.CREATED_BY]: text()
+	createdBy: text(COLUMN_ALIASES.COMMON_COLUMNS.CREATED_BY)
 		.notNull()
-		.references(() => users[COMMON_COLUMN_ENUM.ID], {
-			onDelete: "cascade",
-		}),
-	[COMMON_AUTHORED_COLUMN_ENUM.UPDATED_BY]: text()
+		.references(() => users.id, { onDelete: "cascade" }),
+	updatedBy: text(COLUMN_ALIASES.COMMON_COLUMNS.UPDATED_BY)
 		.notNull()
-		.references(() => users[COMMON_COLUMN_ENUM.ID], {
-			onDelete: "cascade",
-		}),
+		.references(() => users.id, { onDelete: "cascade" }),
 } as const;
 
 /**
@@ -60,53 +47,53 @@ export const users = sqliteTable(
 	{
 		...COMMON_COLUMNS,
 
-		[COMMON_COLUMN_ENUM.ID]: text(),
+		id: text(COLUMN_ALIASES.COMMON_COLUMNS.ID),
 
 		/**
 		 * user username
 		 */
-		[USER_COLUMN_ENUM.NAME]: text().notNull(),
+		name: text(COLUMN_ALIASES.USERS.NAME).notNull(),
 
 		/**
 		 * user email address
 		 */
-		[USER_COLUMN_ENUM.EMAIL]: text().notNull().unique(),
+		email: text(COLUMN_ALIASES.USERS.EMAIL).notNull().unique(),
 
 		/**
 		 * is email verified
 		 */
-		[USER_COLUMN_ENUM.EMAIL_VERIFIED]: int({
+		emailVerified: int(COLUMN_ALIASES.USERS.EMAIL_VERIFIED, {
 			mode: "boolean",
 		}).default(false),
 
 		/**
 		 * user image URL
 		 */
-		[USER_COLUMN_ENUM.IMAGE]: text(),
+		image: text(COLUMN_ALIASES.USERS.IMAGE),
 
 		/**
 		 * user role
 		 */
-		[USER_COLUMN_ENUM.ROLE]: text({
+		role: text(COLUMN_ALIASES.USERS.ROLE, {
 			enum: [...USER_ROLE_LIST],
 		}).default(USER_ROLE_DEFAULT),
 
 		/**
 		 * is user banned
 		 */
-		[USER_COLUMN_ENUM.BANNED]: int({
+		banned: int(COLUMN_ALIASES.USERS.BANNED, {
 			mode: "boolean",
 		}).default(false),
 
 		/**
 		 * reason for banning the user
 		 */
-		[USER_COLUMN_ENUM.BAN_REASON]: text(),
+		banReason: text(COLUMN_ALIASES.USERS.BAN_REASON),
 
 		/**
 		 * when the ban expires
 		 */
-		[USER_COLUMN_ENUM.BAN_EXPIRES]: int({
+		banExpires: int(COLUMN_ALIASES.USERS.BAN_EXPIRES, {
 			mode: "timestamp",
 		}),
 	},
@@ -115,14 +102,12 @@ export const users = sqliteTable(
 		/**
 		 * primary key
 		 */
-		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
-		}),
+		primaryKey({ columns: [table.id] }),
 
 		/**
 		 * indexes
 		 */
-		index(INDEXES_ENUM.USERS_EMAIL).on(table[USER_COLUMN_ENUM.EMAIL]),
+		index("idx_users_email").on(table.email),
 	]
 );
 export const sessions = sqliteTable(
@@ -133,25 +118,25 @@ export const sessions = sqliteTable(
 		/**
 		 * primary key for the session table
 		 */
-		[COMMON_COLUMN_ENUM.ID]: text(),
+		id: text(COLUMN_ALIASES.COMMON_COLUMNS.ID),
 
 		/**
 		 * references the user table (id)
 		 */
-		[SESSION_COLUMN_ENUM.USER_ID]: text()
+		userId: text(COLUMN_ALIASES.SESSIONS.USER_ID)
 			.notNull()
 			.references(() => users.id, {
 				onDelete: "cascade",
 			}),
 
-		[SESSION_COLUMN_ENUM.TOKEN]: text().notNull().unique(),
-		[SESSION_COLUMN_ENUM.EXPIRES_AT]: int({
+		token: text(COLUMN_ALIASES.SESSIONS.TOKEN).notNull().unique(),
+		expiresAt: int(COLUMN_ALIASES.SESSIONS.EXPIRES_AT, {
 			mode: "timestamp",
 		}).notNull(),
 
-		[SESSION_COLUMN_ENUM.IP_ADDRESS]: text(),
-		[SESSION_COLUMN_ENUM.USER_AGENT]: text(),
-		[SESSION_COLUMN_ENUM.IMPERSONATED_BY]: text(),
+		ipAddress: text(COLUMN_ALIASES.SESSIONS.IP_ADDRESS),
+		userAgent: text(COLUMN_ALIASES.SESSIONS.USER_AGENT),
+		impersonatedBy: text(COLUMN_ALIASES.SESSIONS.IMPERSONATED_BY),
 	},
 
 	(table) => [
@@ -159,14 +144,14 @@ export const sessions = sqliteTable(
 		 * primary key
 		 */
 		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
+			columns: [table.id],
 		}),
 
 		/**
 		 * indexes
 		 */
-		index(INDEXES_ENUM.SESSION_USER_ID).on(table[SESSION_COLUMN_ENUM.USER_ID]),
-		index(INDEXES_ENUM.SESSION_TOKEN).on(table[SESSION_COLUMN_ENUM.TOKEN]),
+		index("idx_sessions_user_id").on(table.userId),
+		index("idx_sessions_token").on(table.token),
 	]
 );
 export const accounts = sqliteTable(
@@ -177,30 +162,33 @@ export const accounts = sqliteTable(
 		/**
 		 * primary key for the account table
 		 */
-		[COMMON_COLUMN_ENUM.ID]: text(),
+		id: text(COLUMN_ALIASES.COMMON_COLUMNS.ID),
 
 		/**
 		 * references the user table (id)
 		 */
-		[ACCOUNT_COLUMN_ENUM.USER_ID]: text()
+		userId: text(COLUMN_ALIASES.ACCOUNTS.USER_ID)
 			.notNull()
 			.references(() => users.id, {
 				onDelete: "cascade",
 			}),
 
-		[ACCOUNT_COLUMN_ENUM.ACCOUNT_ID]: text().notNull(),
-		[ACCOUNT_COLUMN_ENUM.PROVIDER_ID]: text().notNull(),
-		[ACCOUNT_COLUMN_ENUM.ACCESS_TOKEN]: text(),
-		[ACCOUNT_COLUMN_ENUM.REFRESH_TOKEN]: text(),
-		[ACCOUNT_COLUMN_ENUM.ACCESS_TOKEN_EXPIRES_AT]: int({
+		accountId: text(COLUMN_ALIASES.ACCOUNTS.ACCOUNT_ID).notNull(),
+		providerId: text(COLUMN_ALIASES.ACCOUNTS.PROVIDER_ID).notNull(),
+		accessToken: text(COLUMN_ALIASES.ACCOUNTS.ACCESS_TOKEN),
+		refreshToken: text(COLUMN_ALIASES.ACCOUNTS.REFRESH_TOKEN),
+		accessTokenExpiresAt: int(COLUMN_ALIASES.ACCOUNTS.ACCESS_TOKEN_EXPIRES_AT, {
 			mode: "timestamp",
 		}),
-		[ACCOUNT_COLUMN_ENUM.REFRESH_TOKEN_EXPIRES_AT]: int({
-			mode: "timestamp",
-		}),
-		[ACCOUNT_COLUMN_ENUM.SCOPE]: text(),
-		[ACCOUNT_COLUMN_ENUM.ID_TOKEN]: text(),
-		[ACCOUNT_COLUMN_ENUM.PASSWORD]: text(),
+		refreshTokenExpiresAt: int(
+			COLUMN_ALIASES.ACCOUNTS.REFRESH_TOKEN_EXPIRES_AT,
+			{
+				mode: "timestamp",
+			}
+		),
+		scope: text(COLUMN_ALIASES.ACCOUNTS.SCOPE),
+		idToken: text(COLUMN_ALIASES.ACCOUNTS.ID_TOKEN),
+		password: text(COLUMN_ALIASES.ACCOUNTS.PASSWORD),
 	},
 
 	(table) => [
@@ -208,13 +196,13 @@ export const accounts = sqliteTable(
 		 * primary key
 		 */
 		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
+			columns: [table.id],
 		}),
 
 		/**
 		 * indexes
 		 */
-		index(INDEXES_ENUM.ACCOUNTS_USER_ID).on(table[ACCOUNT_COLUMN_ENUM.USER_ID]),
+		index("idx_accounts_user_id").on(table.userId),
 	]
 );
 export const verifications = sqliteTable(
@@ -225,11 +213,11 @@ export const verifications = sqliteTable(
 		/**
 		 * primary key for the verification table
 		 */
-		[COMMON_COLUMN_ENUM.ID]: text(),
+		id: text(COLUMN_ALIASES.COMMON_COLUMNS.ID),
 
-		[VERIFICATION_COLUMN_ENUM.IDENTIFIER]: text().notNull(),
-		[VERIFICATION_COLUMN_ENUM.VALUE]: text().notNull(),
-		[VERIFICATION_COLUMN_ENUM.EXPIRES_AT]: int({
+		identifier: text(COLUMN_ALIASES.VERIFICATIONS.IDENTIFIER).notNull(),
+		value: text(COLUMN_ALIASES.VERIFICATIONS.VALUE).notNull(),
+		expiresAt: int(COLUMN_ALIASES.VERIFICATIONS.EXPIRES_AT, {
 			mode: "timestamp",
 		}).notNull(),
 	},
@@ -239,15 +227,13 @@ export const verifications = sqliteTable(
 		 * primary key
 		 */
 		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
+			columns: [table.id],
 		}),
 
 		/**
 		 * indexes
 		 */
-		index(INDEXES_ENUM.VERIFICATIONS_IDENTIFIER).on(
-			table[VERIFICATION_COLUMN_ENUM.IDENTIFIER]
-		),
+		index("idx_verifications_identifier").on(table.identifier),
 	]
 );
 
@@ -257,27 +243,27 @@ export const tags = sqliteTable(
 		...COMMON_COLUMNS,
 		...COMMON_AUTHORED_COLUMNS,
 
-		[COMMON_COLUMN_ENUM.ID]: int(),
-		[TAGS_COLUMN_ENUM.NAME]: text({
+		id: int(COLUMN_ALIASES.COMMON_COLUMNS.ID),
+		name: text("name", {
 			length: 100,
 		})
 			.notNull()
 			.unique(),
-		[TAGS_COLUMN_ENUM.SLUG]: text().notNull().unique(),
+		slug: text("slug").notNull().unique(),
 	},
 	(table) => [
 		/**
 		 * primary key
 		 */
 		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
+			columns: [table.id],
 		}),
 
 		/**
 		 * indexes
 		 */
-		index(INDEXES_ENUM.TAGS_NAME).on(table[TAGS_COLUMN_ENUM.NAME]),
-		index(INDEXES_ENUM.TAGS_SLUG).on(table[TAGS_COLUMN_ENUM.SLUG]),
+		index("idx_tags_name").on(table.name),
+		index("idx_tags_slug").on(table.slug),
 	]
 );
 
@@ -287,13 +273,13 @@ export const locales = sqliteTable(
 		...COMMON_COLUMNS,
 		...COMMON_AUTHORED_COLUMNS,
 
-		[COMMON_COLUMN_ENUM.ID]: int(),
-		[LOCALE_COLUMN_ENUM.CODE]: text({
+		id: int(COLUMN_ALIASES.COMMON_COLUMNS.ID),
+		code: text("code", {
 			length: 5,
 		})
 			.notNull()
 			.unique(),
-		[LOCALE_COLUMN_ENUM.NAME]: text({
+		name: text("name", {
 			length: 50,
 		}).notNull(),
 	},
@@ -303,14 +289,14 @@ export const locales = sqliteTable(
 		 * primary key
 		 */
 		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
+			columns: [table.id],
 		}),
 
 		/**
 		 * indexes
 		 */
-		index(INDEXES_ENUM.LOCALES_CODE).on(table[LOCALE_COLUMN_ENUM.CODE]),
-		index(INDEXES_ENUM.LOCALES_NAME).on(table[LOCALE_COLUMN_ENUM.NAME]),
+		index(INDEXES_ENUM.LOCALES_CODE).on(table.code),
+		index(INDEXES_ENUM.LOCALES_NAME).on(table.name),
 	]
 );
 
@@ -320,10 +306,10 @@ export const mimeTypes = sqliteTable(
 		...COMMON_COLUMNS,
 		...COMMON_AUTHORED_COLUMNS,
 
-		[COMMON_COLUMN_ENUM.ID]: int(),
-		[MEDIA_MIME_TYPE_COLUMN_ENUM.MIME_TYPE]: text().notNull().unique(),
-		[MEDIA_MIME_TYPE_COLUMN_ENUM.TITLE]: text(),
-		[MEDIA_MIME_TYPE_COLUMN_ENUM.DESCRIPTION]: text(),
+		id: int(COLUMN_ALIASES.COMMON_COLUMNS.ID),
+		mimeType: text("mime_type").notNull().unique(),
+		title: text("title"),
+		description: text("description"),
 	},
 
 	(table) => [
@@ -331,15 +317,13 @@ export const mimeTypes = sqliteTable(
 		 * primary key
 		 */
 		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
+			columns: [table.id],
 		}),
 
 		/**
 		 * indexes
 		 */
-		index(INDEXES_ENUM.MIME_TYPES_MIME_TYPE).on(
-			table[MEDIA_MIME_TYPE_COLUMN_ENUM.MIME_TYPE]
-		),
+		index("idx_mime_types_mime_type").on(table.mimeType),
 	]
 );
 
@@ -349,12 +333,12 @@ export const medias = sqliteTable(
 		...COMMON_COLUMNS,
 		...COMMON_AUTHORED_COLUMNS,
 
-		[COMMON_COLUMN_ENUM.ID]: int(),
+		id: int(COLUMN_ALIASES.COMMON_COLUMNS.ID),
 
 		/**
 		 * foreign keys
 		 */
-		[MEDIA_COLUMN_ENUM.MEDIA_MIME_TYPE_ID]: int()
+		mediaMimeTypeId: int()
 			.notNull()
 			.references(() => mimeTypes.id, {
 				onDelete: "cascade",
@@ -363,35 +347,35 @@ export const medias = sqliteTable(
 		/**
 		 * general fields
 		 */
-		[MEDIA_COLUMN_ENUM.NAME]: text(),
-		[MEDIA_COLUMN_ENUM.DESCRIPTION]: text(),
-		[MEDIA_COLUMN_ENUM.STORAGE_KEY]: text().notNull().unique(),
-		[MEDIA_COLUMN_ENUM.SIZE_IN_BYTES]: int().notNull(),
+		name: text("name"),
+		description: text("description"),
+		storageKey: text("storage_key").notNull().unique(),
+		sizeInBytes: int("size_in_bytes").notNull(),
 
 		/**
 		 * image-kind specific fields
 		 */
-		[MEDIA_COLUMN_ENUM.IMAGE_WIDTH]: int(),
-		[MEDIA_COLUMN_ENUM.IMAGE_HEIGHT]: int(),
-		[MEDIA_COLUMN_ENUM.IMAGE_ALT_TEXT]: text(),
+		imageWidth: int("image_width"),
+		imageHeight: int("image_height"),
+		imageAltText: text("image_alt_text"),
 
 		/**
 		 * playable-kind specific fields
 		 */
-		[MEDIA_COLUMN_ENUM.DURATION]: int(),
+		duration: int("duration"),
 	} as const,
 	(table) => [
 		/**
 		 * primary key
 		 */
 		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
+			columns: [table.id],
 		}),
 
 		/**
 		 * indexes
 		 */
-		index(INDEXES_ENUM.MEDIA_NAME).on(table[MEDIA_COLUMN_ENUM.NAME]),
+		index("idx_medias_name").on(table.name),
 	]
 );
 
@@ -400,24 +384,20 @@ export const mediaTags = sqliteTable(
 	{
 		...COMMON_COLUMNS,
 
-		[COMMON_COLUMN_ENUM.ID]: int(),
-		[MEDIA_TAGS_COLUMN_ENUM.MEDIA_ID]: int()
+		id: int(COLUMN_ALIASES.COMMON_COLUMNS.ID),
+		mediaId: int("media_id")
 			.notNull()
-			.references(() => medias.id, {
-				onDelete: "cascade",
-			}),
-		[MEDIA_TAGS_COLUMN_ENUM.TAG_ID]: int()
+			.references(() => medias.id, { onDelete: "cascade" }),
+		tagId: int("tag_id")
 			.notNull()
-			.references(() => tags.id, {
-				onDelete: "cascade",
-			}),
+			.references(() => tags.id, { onDelete: "cascade" }),
 	},
 	(table) => [
 		/**
 		 * primary key
 		 */
 		primaryKey({
-			columns: [table[COMMON_COLUMN_ENUM.ID]],
+			columns: [table.id],
 		}),
 
 		/**
@@ -436,15 +416,15 @@ export const userRelations = relations(users, ({ many }) => ({
 
 export const sessionRelations = relations(sessions, ({ one }) => ({
 	user: one(users, {
-		fields: [sessions[SESSION_COLUMN_ENUM.USER_ID]],
-		references: [users[COMMON_COLUMN_ENUM.ID]],
+		fields: [sessions.userId],
+		references: [users.id],
 	}),
 }));
 
 export const accountRelations = relations(accounts, ({ one }) => ({
 	user: one(users, {
-		fields: [accounts[ACCOUNT_COLUMN_ENUM.USER_ID]],
-		references: [users[COMMON_COLUMN_ENUM.ID]],
+		fields: [accounts.userId],
+		references: [users.id],
 	}),
 }));
 
@@ -456,8 +436,8 @@ export const mediaMimeTypeRelations = relations(mimeTypes, ({ many }) => ({
 
 export const mediaRelations = relations(medias, ({ one, many }) => ({
 	mediaMimeType: one(mimeTypes, {
-		fields: [medias[MEDIA_COLUMN_ENUM.MEDIA_MIME_TYPE_ID]],
-		references: [mimeTypes[COMMON_COLUMN_ENUM.ID]],
+		fields: [medias.mediaMimeTypeId],
+		references: [mimeTypes.id],
 	}),
 	mediaTags: many(mediaTags),
 }));
@@ -470,11 +450,11 @@ export const tagRelations = relations(tags, ({ many }) => ({
 
 export const mediaTagRelations = relations(mediaTags, ({ one }) => ({
 	media: one(medias, {
-		fields: [mediaTags[MEDIA_TAGS_COLUMN_ENUM.MEDIA_ID]],
-		references: [medias[COMMON_COLUMN_ENUM.ID]],
+		fields: [mediaTags.mediaId],
+		references: [medias.id],
 	}),
 	tag: one(tags, {
-		fields: [mediaTags[MEDIA_TAGS_COLUMN_ENUM.TAG_ID]],
-		references: [tags[COMMON_COLUMN_ENUM.ID]],
+		fields: [mediaTags.tagId],
+		references: [tags.id],
 	}),
 }));
