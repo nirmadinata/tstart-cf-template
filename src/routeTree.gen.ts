@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AdminDashboardProductsRouteImport } from './routes/_admin.dashboard/products'
 import { Route as AdminAuthLoginRouteImport } from './routes/_admin.auth/login'
 import { Route as AdminAuthForgotPasswordRouteImport } from './routes/_admin.auth/forgot-password'
@@ -29,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
   path: '/api/rpc/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDashboardProductsRoute = AdminDashboardProductsRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
   '/auth/login': typeof AdminAuthLoginRoute
   '/dashboard/products': typeof AdminDashboardProductsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
   '/auth/login': typeof AdminAuthLoginRoute
   '/dashboard/products': typeof AdminDashboardProductsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/_admin/auth/forgot-password': typeof AdminAuthForgotPasswordRoute
   '/_admin/auth/login': typeof AdminAuthLoginRoute
   '/_admin/dashboard/products': typeof AdminDashboardProductsRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/dashboard/products'
+    | '/api/auth/$'
     | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/dashboard/products'
+    | '/api/auth/$'
     | '/api/rpc/$'
   id:
     | '__root__'
@@ -103,12 +114,14 @@ export interface FileRouteTypes {
     | '/_admin/auth/forgot-password'
     | '/_admin/auth/login'
     | '/_admin/dashboard/products'
+    | '/api/auth/$'
     | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
@@ -133,6 +146,13 @@ declare module '@tanstack/react-router' {
       path: '/api/rpc/$'
       fullPath: '/api/rpc/$'
       preLoaderRoute: typeof ApiRpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_admin/dashboard/products': {
@@ -185,6 +205,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
 export const routeTree = rootRouteImport

@@ -7,6 +7,7 @@ import type { DB } from "better-auth/adapters/drizzle";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 import { admin, openAPI } from "better-auth/plugins";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 import type { GetInternalDB } from "@/integrations/db";
 import { getDB } from "@/integrations/db";
 import { COLUMN_ALIASES, TABLE_ALIASES } from "@/integrations/db/constants";
@@ -123,6 +124,12 @@ function createAuth({
 					},
 				},
 			}),
+
+			/**
+			 * TanStack Start cookie handling plugin
+			 * MUST be the last plugin in the array
+			 */
+			tanstackStartCookies(),
 		],
 	});
 }

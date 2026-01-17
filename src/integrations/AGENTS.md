@@ -21,12 +21,19 @@
 
 ### `auth` (Better Auth)
 - **Library**: `better-auth`.
-- **Configuration**: Located in `index.ts`.
+- **Configuration**: Server-side auth instance in `index.ts`, client-side in `client.ts`.
+- **TanStack Start Integration**:
+  - Uses `tanstackStartCookies()` plugin for proper cookie handling (must be LAST in plugins array).
+  - Auth handler mounted at `/api/auth/*` via `src/routes/api/auth.$.ts`.
 - **Do's**:
   - Use exported hooks/functions from `@/integrations/auth` (e.g., `getAuth`, `authClient`).
+  - Use `authClient` from `@/integrations/auth/client` for React components (`useSession`, `signIn`, `signOut`).
   - Respect the database schema mappings defined in `constants.ts`.
+  - Always add `tanstackStartCookies()` as the **last** plugin when using server-side auth functions.
 - **Don'ts**:
   - Do not modify internal usage of `better-auth` plugins without understanding the schema implications.
+  - Do not confuse Better Auth with NextAuth - they are completely different packages.
+  - Do not use `fetch` directly for auth API calls; use the `authClient` instead.
 
 ### `orpc` (Type-Safe API)
 - **Library**: `@orpc/server` family.
