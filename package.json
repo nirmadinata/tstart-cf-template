@@ -21,7 +21,7 @@
     "email:build": "email build -d ./src/integrations/emails/templates"
   },
   "dependencies": {
-    "@cloudflare/vite-plugin": "^1.20.3",
+    "@cloudflare/vite-plugin": "^1.21.0",
     "@faker-js/faker": "^10.2.0",
     "@orpc/client": "^1.13.4",
     "@orpc/json-schema": "^1.13.4",
@@ -51,6 +51,7 @@
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/router-plugin": "^1.150.0",
     "@unpic/react": "^1.0.2",
+    "ahooks": "^3.9.6",
     "better-auth": "^1.4.13",
     "better-sqlite3": "^12.6.0",
     "class-variance-authority": "^0.7.1",
@@ -58,6 +59,7 @@
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
     "lucide-react": "^0.544.0",
+    "nuqs": "^2.8.6",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "tailwind-merge": "^3.4.0",
@@ -74,7 +76,7 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.1",
     "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^22.19.6",
+    "@types/node": "^22.19.7",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
@@ -88,6 +90,6 @@
     "vite": "^7.3.1",
     "vitest": "^3.2.4",
     "web-vitals": "^5.1.0",
-    "wrangler": "^4.59.1"
+    "wrangler": "^4.59.2"
   }
 }

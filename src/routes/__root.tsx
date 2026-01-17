@@ -3,9 +3,10 @@ import type { QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
 	HeadContent,
+	Outlet,
 	Scripts,
 } from "@tanstack/react-router";
-import type { PropsWithChildren, } from "react";
+import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import { Suspense } from "react";
 import { plugins } from "@/integrations/tanstack";
 import appCss from "@/styles/styles.css?url";
@@ -40,9 +41,7 @@ export const Route = createRootRouteWithContext<RootContext>()({
 	shellComponent: RootDocument,
 });
 
-type Props = PropsWithChildren;
-
-function RootDocument({ children }: Props) {
+function RootDocument() {
 	return (
 		<html lang="en">
 			<head>
@@ -50,7 +49,9 @@ function RootDocument({ children }: Props) {
 			</head>
 			<body>
 				{/* TODO: add navbars here */}
-				{children}
+				<NuqsAdapter>
+					<Outlet />
+				</NuqsAdapter>
 				<Suspense>
 					<TanStackDevtools
 						config={{

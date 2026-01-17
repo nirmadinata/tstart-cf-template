@@ -17,10 +17,8 @@ export const getRouter = () => {
 		defaultPreload: "intent",
 	});
 
-	setupRouterSsrQueryIntegration({
-		router,
-		queryClient,
-	});
+	// @ts-expect-error setup SSR integration
+	setupRouterSsrQueryIntegration({ router, queryClient });
 
 	return router;
 };
