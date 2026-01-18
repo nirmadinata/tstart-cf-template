@@ -89,20 +89,6 @@ export const INDEXES_ENUM = {
 } as const;
 
 /**
- * common column names
- */
-export const COMMON_COLUMN_ENUM = {
-	ID: "id",
-	CREATED_AT: "created_at",
-	UPDATED_AT: "updated_at",
-} as const;
-
-export const COMMON_AUTHORED_COLUMN_ENUM = {
-	CREATED_BY: "created_by",
-	UPDATED_BY: "updated_by",
-} as const;
-
-/**
  * constants for schema definitions
  */
 export const USER_ROLE_ENUM = {
